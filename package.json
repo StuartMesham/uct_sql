@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "ace-builds": "^1.4.12",
+    "sql.js": "^1.4.0"
+  }
+}

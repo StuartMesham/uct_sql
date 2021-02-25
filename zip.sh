@@ -1,0 +1,1 @@
+cat required_files.txt | xargs zip sql_practice.zip

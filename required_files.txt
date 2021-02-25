@@ -1,0 +1,9 @@
+ace-mode-sqlcaps.js
+index.html
+main.css
+node_modules/ace-builds/src-min-noconflict/ace.js
+node_modules/ace-builds/src-min-noconflict/ext-language_tools.js
+node_modules/ace-builds/src-min-noconflict/theme-monokai.js
+node_modules/ace-builds/src-min-noconflict/theme-crimson_editor.js
+node_modules/ace-builds/src-min-noconflict/snippets/sql.js
+node_modules/sql.js/dist/sql-asm.js
