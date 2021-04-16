@@ -329,7 +329,7 @@ const databases = {
         'column_names': ['id', 'name', 'birthdate']
     },
     'tv_normalized': {
-        'sql': sqlstr = "CREATE TABLE character (id int, name char);"
+        'sql': "CREATE TABLE character (id int, name char);"
             + "INSERT INTO character VALUES (1, 'Doogie Howser');"
             + "INSERT INTO character VALUES (2, 'Barney Stinson');"
             + "INSERT INTO character VALUES (3, 'Lily Aldrin');"
