@@ -1,6 +1,7 @@
 ace-mode-sqlcaps.js
 index.html
 main.css
+levels.js
 node_modules/ace-builds/src-min-noconflict/ace.js
 node_modules/ace-builds/src-min-noconflict/ext-language_tools.js
 node_modules/ace-builds/src-min-noconflict/theme-monokai.js
