@@ -29,14 +29,10 @@
     for (let i = 0; i < levels.length; i++)
         short_name_to_level_number[levels[i]['short_name']] = i;
 
-    const render_menu = function () {
-        selector = document.getElementById("level-selector");
-        for (let i in levels) {
-            selector.innerHTML += '<option value="#' + levels[i]['short_name'] + '">' + levels[i]['name'] + '</option>';
-        }
-    }
-
-    render_menu();
+    prompt_box = document.getElementById("prompt");
+    level_selector = document.getElementById("level-selector");
+    for (let i in levels)
+        level_selector.innerHTML += '<option value="#' + levels[i]['short_name'] + '">' + levels[i]['name'] + '</option>';
 
     let execute_query = function () {
         try {
@@ -150,6 +146,8 @@
         let level = levels[level_number];
 
         db = load_database(level['database_type']);
+
+        prompt_box.innerHTML = level['prompt'];
 
 
         let autocompleteValues = table_names.map(table_name => {
