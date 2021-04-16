@@ -16,6 +16,7 @@
     <button onclick="execute_query()">Run (ctrl/cmd-enter)</button>
 </div>
 <div id="results"></div>
+<div id="grade"></div>
 
 <script src="node_modules/sql.js/dist/sql-asm.js"></script>
 <script charset="utf-8" src="node_modules/ace-builds/src-min-noconflict/ace.js" type="text/javascript"></script>
@@ -26,6 +27,8 @@
 
     const short_name_to_level_number = {};
 
+    var level;
+
     for (let i = 0; i < levels.length; i++)
         short_name_to_level_number[levels[i]['short_name']] = i;
 
@@ -33,6 +36,17 @@
     level_selector = document.getElementById("level-selector");
     for (let i in levels)
         level_selector.innerHTML += '<option value="#' + levels[i]['short_name'] + '">' + levels[i]['name'] + '</option>';
+
+    let is_correct = function(results, correct_answer) {
+        if (!results) {
+            return false;
+        }
+
+        // Check to make sure the results are equal, but normalize case and remove whitespace from column names.
+        var normalize = function(x){return x.toUpperCase().replace(/\s/g, "")};
+        return JSON.stringify(results[0].columns.map(normalize)) === JSON.stringify(correct_answer.columns.map(normalize)) &&
+            JSON.stringify(results[0].values) === JSON.stringify(correct_answer.values);
+    };
 
     let execute_query = function () {
         try {
@@ -42,8 +56,15 @@
             } else {
                 document.getElementById("results").innerHTML = '<div class="table-container">' + table_from_results(results) + "</div>";
             }
+
+            if (is_correct(results, level['answer'])) {
+                document.getElementById("grade").innerHTML = 'correct';
+            } else {
+                document.getElementById("grade").innerHTML = 'incorrect';
+            }
         } catch (err) {
             document.getElementById("results").innerHTML = err;
+            document.getElementById("grade").innerHTML = '';
         }
         // scroll to bottom so mobile users see the result
         window.scrollTo(0, document.body.scrollHeight);
@@ -143,7 +164,7 @@
         else
             level_number = 0;
 
-        let level = levels[level_number];
+        level = levels[level_number];
 
         db = load_database(level['database_type']);
 
