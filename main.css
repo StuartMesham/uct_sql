@@ -1,11 +1,30 @@
 #editor {
-        width: 100%;
-        min-height: 50px;
-    }
+  width: 100%;
+  min-height: 50px;
+}
 
 #current-tables {
   display: flex;
   flex-wrap: wrap;
+}
+
+code {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+  font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+}
+
+b, strong {
+  font-weight: 700;
+}
+
+#prompt {
+  margin: auto;
+  width: auto;
+  max-width: 600px;
 }
 
 th, td {
@@ -50,6 +69,19 @@ button {
 }
 
 @media (prefers-color-scheme: dark) {
+
+code {
+  color: #f92672;
+  background-color: #282922;
+}
+
+a:link {
+  color: aqua;
+}
+
+a:visited {
+  color: darkcyan;
+}
 
 button {
   background-color: #344a00;
