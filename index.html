@@ -35,8 +35,14 @@
 
     prompt_box = document.getElementById("prompt");
     level_selector = document.getElementById("level-selector");
-    for (let i in levels)
-        level_selector.innerHTML += '<option value="#' + levels[i]['short_name'] + '">' + levels[i]['name'] + '</option>';
+
+    const hash_code = decodeURI(window.location.hash.substr(1));
+    for (let i in levels) {
+        if (levels[i]['short_name'] === hash_code)
+            level_selector.innerHTML += '<option selected value="#' + levels[i]['short_name'] + '">' + levels[i]['name'] + '</option>';
+        else
+            level_selector.innerHTML += '<option value="#' + levels[i]['short_name'] + '">' + levels[i]['name'] + '</option>';
+    }
 
     let is_correct = function(results, correct_answer) {
         if (!results) {
