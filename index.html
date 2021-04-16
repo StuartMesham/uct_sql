@@ -6,6 +6,8 @@
     <link href="main.css" rel="stylesheet">
 </head>
 <body>
+<select id="level-selector" onchange="location = this.value;">
+</select>
 <div id="lesson-name"></div>
 <div id="prompt"></div>
 <div id='current-tables'></div>
@@ -21,6 +23,20 @@
 <script charset="utf-8" src="ace-mode-sqlcaps.js" type="text/javascript"></script>
 <script charset="utf-8" src="levels.js" type="text/javascript"></script>
 <script>
+
+    const short_name_to_level_number = {};
+
+    for (let i = 0; i < levels.length; i++)
+        short_name_to_level_number[levels[i]['short_name']] = i;
+
+    const render_menu = function () {
+        selector = document.getElementById("level-selector");
+        for (let i in levels) {
+            selector.innerHTML += '<option value="#' + levels[i]['short_name'] + '">' + levels[i]['name'] + '</option>';
+        }
+    }
+
+    render_menu();
 
     let execute_query = function () {
         try {
@@ -47,6 +63,9 @@
         enableLiveAutocompletion: true,
         maxLines: Infinity,
     });
+
+    // fetch ace's language tools module:
+    const langTools = ace.require('ace/ext/language_tools');
 
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         editor.setTheme("ace/theme/monokai");
@@ -119,19 +138,19 @@
         return database;
     };
 
-    var initSqlJs = window.initSqlJs;
-    initSqlJs({
-        // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
-        // You can omit locateFile completely when running in node
-        locateFile: file => `node_modules/sql.js/dist/${file}`
-    }).then(function (SQL) {
+    const load_level = function () {
+        const hash_code = decodeURI(window.location.hash.substr(1));
 
-        sql = SQL;
+        let level_number;
+        if (hash_code in short_name_to_level_number)
+            level_number = short_name_to_level_number[hash_code];
+        else
+            level_number = 0;
 
-        db = load_database('tv_extra');
+        let level = levels[level_number];
 
-        // fetch ace's language tools module:
-        var langTools = ace.require('ace/ext/language_tools');
+        db = load_database(level['database_type']);
+
 
         let autocompleteValues = table_names.map(table_name => {
             return {
@@ -156,7 +175,21 @@
             }
         };
         // finally, bind to langTools:
-        langTools.addCompleter(sqlTablesCompleter);
+        langTools.setCompleters([langTools.keyWordCompleter, langTools.snippetCompleter, sqlTablesCompleter]);
+    }
+
+    var initSqlJs = window.initSqlJs;
+    initSqlJs({
+        // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
+        // You can omit locateFile completely when running in node
+        locateFile: file => `node_modules/sql.js/dist/${file}`
+    }).then(function (SQL) {
+
+        sql = SQL;
+
+        load_level();
+
+        window.onhashchange = load_level;
     });
 
 
