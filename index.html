@@ -6,17 +6,19 @@
     <link href="main.css" rel="stylesheet">
 </head>
 <body>
-<div id="selector-div">
-    <select id="level-selector" onchange="location = this.value;"></select>
+<div id="left-div">
+    <div id="selector-div">
+        <select id="level-selector" onchange="location = this.value;"></select>
+    </div>
+    <div id="lesson-name"></div>
+    <div id='current-tables'></div>
+    <div id="editor"></div>
+    <div>
+        <button onclick="execute_query()">Run (ctrl/cmd-enter)</button>
+    </div>
+    <div id="results"></div>
+    <div id="grade"></div>
 </div>
-<div id="lesson-name"></div>
-<div id='current-tables'></div>
-<div id="editor"></div>
-<div>
-    <button onclick="execute_query()">Run (ctrl/cmd-enter)</button>
-</div>
-<div id="results"></div>
-<div id="grade"></div>
 <div id="prompt"></div>
 
 <script src="node_modules/sql.js/dist/sql-asm.js"></script>

@@ -17,6 +17,12 @@ code {
   font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
 }
 
+#left-div {
+  width: fit-content;
+  min-width: 600px;
+  float: left;
+}
+
 #selector-div {
   padding-top: 20px;
   padding-left: 20px;
@@ -27,9 +33,11 @@ b, strong {
 }
 
 #prompt {
+  padding: 15px;
   margin: auto;
-  width: auto;
-  max-width: 600px;
+  width: 500px;
+  /*max-width: 500px;*/
+  float: left;
 }
 
 th, td {
@@ -71,6 +79,20 @@ button {
   padding: 8px;
   border-radius: 4px;
   font-weight: bold;
+  margin: 10px;
+}
+
+@media only screen and (max-width: 800px) {
+  #left-div {
+    width: auto;
+    float: unset;
+    min-width: unset;
+  }
+  #prompt {
+    float: unset;
+    width: auto;
+    padding: 10px;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
