@@ -286,35 +286,35 @@
 
         sql = SQL;
 
-    db = load_database('tv_extra');
+        db = load_database('tv_extra');
 
-    // fetch ace's language tools module:
-    var langTools = ace.require('ace/ext/language_tools');
+        // fetch ace's language tools module:
+        var langTools = ace.require('ace/ext/language_tools');
 
-    let autocompleteValues = table_names.map(table_name => {
-        return {
-            value: table_name,
-            meta: "Table",
-            score: 100,
-        }
-    }).concat(
-        column_names.map(column_name => {
+        let autocompleteValues = table_names.map(table_name => {
             return {
-                value: column_name,
-                meta: "Column",
-                score: 0,
+                value: table_name,
+                meta: "Table",
+                score: 100,
             }
-        })
-    );
+        }).concat(
+            column_names.map(column_name => {
+                return {
+                    value: column_name,
+                    meta: "Column",
+                    score: 0,
+                }
+            })
+        );
 
-    // create a completer object with a required callback function:
-    var sqlTablesCompleter = {
-        getCompletions: function (editor, session, pos, prefix, callback) {
-            callback(null, autocompleteValues);
-        }
-    };
-    // finally, bind to langTools:
-    langTools.addCompleter(sqlTablesCompleter);
+        // create a completer object with a required callback function:
+        var sqlTablesCompleter = {
+            getCompletions: function (editor, session, pos, prefix, callback) {
+                callback(null, autocompleteValues);
+            }
+        };
+        // finally, bind to langTools:
+        langTools.addCompleter(sqlTablesCompleter);
     });
 
 
