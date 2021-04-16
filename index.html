@@ -6,10 +6,10 @@
     <link href="main.css" rel="stylesheet">
 </head>
 <body>
-<select id="level-selector" onchange="location = this.value;">
-</select>
+<div id="selector-div">
+    <select id="level-selector" onchange="location = this.value;"></select>
+</div>
 <div id="lesson-name"></div>
-<div id="prompt"></div>
 <div id='current-tables'></div>
 <div id="editor"></div>
 <div>
@@ -17,6 +17,7 @@
 </div>
 <div id="results"></div>
 <div id="grade"></div>
+<div id="prompt"></div>
 
 <script src="node_modules/sql.js/dist/sql-asm.js"></script>
 <script charset="utf-8" src="node_modules/ace-builds/src-min-noconflict/ace.js" type="text/javascript"></script>
@@ -67,7 +68,7 @@
             document.getElementById("grade").innerHTML = '';
         }
         // scroll to bottom so mobile users see the result
-        window.scrollTo(0, document.body.scrollHeight);
+        // window.scrollTo(0, document.body.scrollHeight);
     };
 
 
