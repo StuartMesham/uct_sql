@@ -328,6 +328,25 @@ const databases = {
         'table_names': ['celebs_born'],
         'column_names': ['id', 'name', 'birthdate']
     },
+    'tv': {
+        'sql': "CREATE TABLE character (id int, name char);"
+            + "INSERT INTO character VALUES (1, 'Doogie Howser');"
+            + "INSERT INTO character VALUES (2, 'Barney Stinson');"
+            + "INSERT INTO character VALUES (3, 'Lily Aldrin');"
+            + "INSERT INTO character VALUES (4, 'Willow Rosenberg');"
+            + "CREATE TABLE character_tv_show (id int, character_id int, tv_show_name char);"
+            + "INSERT INTO character_tv_show VALUES (1, 4, 'Buffy the Vampire Slayer');"
+            + "INSERT INTO character_tv_show VALUES (2, 3, 'How I Met Your Mother');"
+            + "INSERT INTO character_tv_show VALUES (3, 2, 'How I Met Your Mother');"
+            + "INSERT INTO character_tv_show VALUES (4, 1, 'Doogie Howser, M.D.');"
+            + "CREATE TABLE character_actor (id int, character_id int, actor_name char);"
+            + "INSERT INTO character_actor VALUES (1, 4, 'Alyson Hannigan');"
+            + "INSERT INTO character_actor VALUES (2, 3, 'Alyson Hannigan');"
+            + "INSERT INTO character_actor VALUES (3, 2, 'Neil Patrick Harris');"
+            + "INSERT INTO character_actor VALUES (4, 1, 'Neil Patrick Harris');",
+        'table_names': ['character', 'character_tv_show', 'character_actor'],
+        'column_names': ['id', 'name', 'character_id', 'tv_show_name', 'actor_name']
+    },
     'tv_normalized': {
         'sql': "CREATE TABLE character (id int, name char);"
             + "INSERT INTO character VALUES (1, 'Doogie Howser');"
