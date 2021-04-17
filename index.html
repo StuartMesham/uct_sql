@@ -65,8 +65,9 @@
             } else {
                 document.getElementById("results").innerHTML = '<div class="table-container">' + table_from_results(results) + "</div>";
             }
-
-            if (is_correct(results, level['answer'])) {
+            if (results.length === 0) {
+                document.getElementById("grade").innerHTML = '';
+            } else if (is_correct(results, level['answer'])) {
                 document.getElementById("grade").innerHTML = 'correct';
             } else {
                 document.getElementById("grade").innerHTML = 'incorrect';
