@@ -7,7 +7,7 @@ var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
 var SqlcapsHighlightRules = function() {
 
     var keywords = (
-        "select|insert|update|delete|from|where|and|or|group|by|order|limit|offset|having|as|case|" +
+        "to|alter|rename|add|column|select|insert|update|set|delete|from|where|and|or|group|by|order|limit|offset|having|as|case|" +
         "when|then|else|end|type|left|right|join|on|outer|desc|asc|union|create|table|primary|key|if|" +
         "foreign|not|references|default|null|inner|cross|natural|database|drop|grant|like|distinct|into|values"
     ).toUpperCase();
@@ -22,7 +22,7 @@ var SqlcapsHighlightRules = function() {
     ).toUpperCase();
 
     var dataTypes = (
-        "int|numeric|decimal|date|varchar|char|bigint|float|double|bit|binary|text|set|timestamp|" +
+        "int|numeric|decimal|date|varchar|char|bigint|float|double|bit|binary|text|timestamp|" +
         "money|real|number|integer"
     ).toUpperCase();
 

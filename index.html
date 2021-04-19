@@ -60,6 +60,7 @@
     let execute_query = function () {
         try {
             var results = db.exec(editor.getValue());
+            refresh_database_view(db);
             if (results.length === 0) {
                 document.getElementById("results").innerHTML = '<div class="table-container">no rows returned</div>';
             } else {
@@ -123,9 +124,9 @@
     var db;
 
     // Return an HTML table as a string, given SQL.js results
-    var table_from_results = function (res) {
+    var table_from_results = function (res, table_column_names) {
         var table_string = '<table>';
-        if (res) {
+        if (res && res.length > 0) {
             table_string += '<tr>';
             for (var index in res[0].columns) {
                 table_string += '<th>' + res[0].columns[index] + '</th>';
@@ -138,6 +139,15 @@
                 }
                 table_string += '</tr>';
             }
+        } else {
+            //If there are no rows in the table, we still want to show the column headings
+            if (typeof table_column_names !== "undefined") {
+                table_string += '<tr>';
+                for (var index in table_column_names) {
+                    table_string += '<th>' + table_column_names[index] + '</th>';
+                }
+                table_string += '</tr>';
+            }
         }
         table_string += '</table>';
         return table_string;
@@ -145,44 +155,34 @@
 
     var table_names, column_names;
 
+    const refresh_database_view = function (database) {
+        let result = database.exec('SELECT name FROM sqlite_master WHERE type = "table"');
+        if (result.length > 0)
+            table_names = result[0].values.flat();
+        else
+            table_names = [];
 
-    // Create the SQL database
-    var load_database = function (db_type) {
-        var database = new sql.Database();
 
-        table_names = databases[db_type]['table_names']
-        column_names = databases[db_type]['column_names']
+        column_names = [];
+        let current_table_string = '';
+        for (let i in table_names) {
+            let table_column_names = [];
+            //get columns
+            let result = database.exec('PRAGMA main.table_info(' + table_names[i] + ')');
+            if (result.length > 0) {
+                for (let j in result[0].values) {
+                    table_column_names.push(result[0].values[j][1]);
+                    column_names.push(result[0].values[j][1]);
+                }
+            }
 
-        database.run(databases[db_type]['sql']);
-
-        var current_table_string = '';
-        for (var index in table_names) {
-            results = database.exec("SELECT * FROM " + table_names[index] + ";");
-            current_table_string += '<div class="table-container"><div class="table-name">' + table_names[index] + '</div>' + table_from_results(results) + '</div>';
+            //display table
+            results = database.exec("SELECT * FROM " + table_names[i] + ";");
+            current_table_string += '<div class="table-container"><div class="table-name">' + table_names[i] + '</div>' + table_from_results(results, table_column_names) + '</div>';
         }
         document.getElementById("current-tables").innerHTML = current_table_string;
 
-        document.getElementById("grade").innerHTML = '';
-        document.getElementById("results").innerHTML = '';
-
-        return database;
-    };
-
-    const load_level = function () {
-        const hash_code = decodeURI(window.location.hash.substr(1));
-
-        let level_number;
-        if (hash_code in short_name_to_level_number)
-            level_number = short_name_to_level_number[hash_code];
-        else
-            level_number = 0;
-
-        level = levels[level_number];
-
-        db = load_database(level['database_type']);
-
-        prompt_box.innerHTML = level['prompt'];
-
+        //update autocompleter
 
         let autocompleteValues = table_names.map(table_name => {
             return {
@@ -208,6 +208,37 @@
         };
         // finally, bind to langTools:
         langTools.setCompleters([langTools.keyWordCompleter, langTools.snippetCompleter, sqlTablesCompleter]);
+    };
+
+
+    // Create the SQL database
+    var load_database = function (db_type) {
+        var database = new sql.Database();
+
+        database.run(databases[db_type]);
+
+        refresh_database_view(database);
+
+        document.getElementById("grade").innerHTML = '';
+        document.getElementById("results").innerHTML = '';
+
+        return database;
+    };
+
+    const load_level = function () {
+        const hash_code = decodeURI(window.location.hash.substr(1));
+
+        let level_number;
+        if (hash_code in short_name_to_level_number)
+            level_number = short_name_to_level_number[hash_code];
+        else
+            level_number = 0;
+
+        level = levels[level_number];
+
+        db = load_database(level['database_type']);
+
+        prompt_box.innerHTML = level['prompt'];
     }
 
     var initSqlJs = window.initSqlJs;

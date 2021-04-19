@@ -169,7 +169,7 @@ const levels = [{'name': 'SELECT *',
                 ['Barney Stinson', 'Neil Patrick Harris'],
                 ['Lily Aldrin', 'Alyson Hannigan'],
                 ['Willow Rosenberg', 'Alyson Hannigan']]},
-        'prompt': 'Different parts of information can be stored in different tables, and in order to put them together, we use <code>INNER JOIN ... ON</code>. Joining tables gets to the core of SQL functionality, but it can get very complicated. We will start with a simple example, and will start with an <code>INNER JOIN</code>.<br/><br/>As you can see below, there are 3 tables:<br/><strong>character</strong>: Each character is a row and is represented by a unique identifier (<em>id</em>), e.g. 1 is Doogie Howser<br/><strong>character_tv_show:</strong> For each character, which show is he/she in?<br/><strong>character_actor</strong>: For each character, who is the actor?<br/><br/>See that in <strong>character_tv_show</strong>, instead of storing both the character and TV show names (e.g. Willow Rosenberg and Buffy the Vampire Slayer), it stores the <em>character_id</em> as a substitute for the character name. This <em>character_id</em> refers to the matching <em>id</em> row from the <strong>character</strong> table. <br/><br/>This is done so data is not duplicated.  For example, if the name of a character were to change, you would only have to change the name of the character in one row. <br/><br/>This allows us to "join" the tables together "on" that reference/common column. <br/><br/>To get each character name with his/her TV show name, we can write <br/><code>SELECT character.name, character_tv_show.tv_show_name<br/> FROM character <br/>INNER JOIN character_tv_show<br/> ON character.id = character_tv_show.character_id;</code><br/>This puts together every row in <strong>character</strong> with the corresponding row in <strong>character_tv_show</strong>, or vice versa.<br/><br/>Note:<br/>- We use the syntax <strong>table_name</strong>.<em>column_name</em>. If we only used <em>column_name</em>, SQL might incorrectly assume which table it is coming from.<br/> - The example query above is written over multiple lines for readability, but that does not affect the query. <br/><br/>Can you use an inner join to pair each character name with the actor who plays them?  Select the columns: <strong>character</strong>.<em>name</em>, <strong>character_actor</strong>.<em>actor_name</em>'},
+        'prompt': 'Different parts of information can be stored in different tables, and in order to put them together, we use <code>INNER JOIN ... ON</code>. Joining tables gets to the core of SQL functionality, but it can get very complicated. We will start with a simple example, and will start with an <code>INNER JOIN</code>.<br/><br/>There are 3 tables:<br/><strong>character</strong>: The details of each character, including the actor and tv show<br/><strong>tv_show:</strong> The name and rating of each tv show<br/><strong>actor</strong>: The details of each character.<br/><br/>See that in <strong>character</strong>, instead of storing the actor and TV show names and ratings (e.g. Alyson Hannigan and Buffy the Vampire Slayer), it stores the <em>actor_id</em> and <em>tv_show_id</em> instead. These <em>actor_id</em> and <em>tv_show_id</em> columns refer to the matching <em>id</em> row from the <strong>actor</strong> and <strong>tv_show</strong> tables respectively. <br/><br/>This is done so data is not duplicated.  For example, if the name of a character were to change, you would only have to change the name of the character in one row. <br/><br/>This allows us to "join" the tables together "on" that reference/common column. <br/><br/>To get each character name with his/her TV show name, we can write <br/><code>SELECT character.name, character_tv_show.tv_show_name<br/> FROM character <br/>INNER JOIN character_tv_show<br/> ON character.id = character_tv_show.character_id;</code><br/>This puts together every row in <strong>character</strong> with the corresponding row in <strong>character_tv_show</strong>, or vice versa.<br/><br/>Note:<br/>- We use the syntax <strong>table_name</strong>.<em>column_name</em>. If we only used <em>column_name</em>, SQL might incorrectly assume which table it is coming from.<br/> - The example query above is written over multiple lines for readability, but that does not affect the query. <br/><br/>Can you use an inner join to pair each character name with the actor who plays them?  Select the columns: <strong>character</strong>.<em>name</em>, <strong>character_actor</strong>.<em>actor_name</em>'},
 
     {'name': 'Multiple joins',
         'short_name': 'multiple_joins',
@@ -284,172 +284,121 @@ const levels = [{'name': 'SELECT *',
 ];
 
 const databases = {
-    'family': {
-        'sql': "CREATE TABLE family_members (id int, name char, gender char, species char, num_books_read int);"
-            + "INSERT INTO family_members VALUES (1, 'Dave', 'male', 'human', 200);"
-            + "INSERT INTO family_members VALUES (2, 'Mary', 'female', 'human', 180);"
-            + "INSERT INTO family_members VALUES (3, 'Pickles', 'male', 'dog', 0);",
-        'table_names': ['family_members'],
-        'column_names': ['id', 'name', 'gender', 'species', 'num_books_read']
-    },
-    'friends_of_pickles': {
-        'sql': "CREATE TABLE friends_of_pickles (id int, name char, gender char, species char, height_cm int);"
-            + "INSERT INTO friends_of_pickles VALUES (1, 'Dave', 'male', 'human', 180);"
-            + "INSERT INTO friends_of_pickles VALUES (2, 'Mary', 'female', 'human', 160);"
-            + "INSERT INTO friends_of_pickles VALUES (3, 'Fry', 'male', 'cat', 30);"
-            + "INSERT INTO friends_of_pickles VALUES (4, 'Leela', 'female', 'cat', 25);"
-            + "INSERT INTO friends_of_pickles VALUES (5, 'Odie', 'male', 'dog', 40);"
-            + "INSERT INTO friends_of_pickles VALUES (6, 'Jumpy', 'male', 'dog', 35);"
-            + "INSERT INTO friends_of_pickles VALUES (7, 'Sneakers', 'male', 'dog', 55);",
-        'table_names': ['friends_of_pickles'],
-        'column_names': ['id', 'name', 'gender', 'species', 'height_cm'],
-    },
-    'family_and_legs': {
-        'sql': "CREATE TABLE family_members (id int, name char, species char, num_books_read int, num_legs int);"
-            + "INSERT INTO family_members VALUES (2, 'Mary', 'human', 180, 2);"
-            + "INSERT INTO family_members VALUES (3, 'Pickles', 'dog', 0, 4);"
-            + "INSERT INTO family_members VALUES (1, 'Dave', 'human', 200, 2);",
-        'table_names': ['family_members'],
-        'column_names': ['id', 'name', 'species', 'num_books_read', 'num_legs']
-    },
-    'family_null': {
-        'sql': "CREATE TABLE family_members (id int, name char, gender char, species char, favorite_book char);"
-            + "INSERT INTO family_members VALUES (1, 'Dave', 'male', 'human', 'To Kill a Mockingbird');"
-            + "INSERT INTO family_members VALUES (2, 'Mary', 'female', 'human', 'Gone with the Wind');"
-            + "INSERT INTO family_members VALUES (3, 'Pickles', 'male', 'dog', NULL);",
-        'table_names': ['family_members'],
-        'column_names': ['id', 'name', 'gender', 'species', 'favorite_book']
-    },
-    'celebs_born': {
-        'sql': "CREATE TABLE celebs_born (id int, name char, birthdate date);"
-            + "INSERT INTO celebs_born VALUES (1, 'Michael Jordan', '1963-02-17');"
-            + "INSERT INTO celebs_born VALUES (2, 'Justin Timberlake', '1981-01-31');"
-            + "INSERT INTO celebs_born VALUES (3, 'Taylor Swift', '1989-12-13');",
-        'table_names': ['celebs_born'],
-        'column_names': ['id', 'name', 'birthdate']
-    },
-    'tv': {
-        'sql': "CREATE TABLE character (id int, name char);"
-            + "INSERT INTO character VALUES (1, 'Doogie Howser');"
-            + "INSERT INTO character VALUES (2, 'Barney Stinson');"
-            + "INSERT INTO character VALUES (3, 'Lily Aldrin');"
-            + "INSERT INTO character VALUES (4, 'Willow Rosenberg');"
-            + "CREATE TABLE character_tv_show (id int, character_id int, tv_show_name char);"
-            + "INSERT INTO character_tv_show VALUES (1, 4, 'Buffy the Vampire Slayer');"
-            + "INSERT INTO character_tv_show VALUES (2, 3, 'How I Met Your Mother');"
-            + "INSERT INTO character_tv_show VALUES (3, 2, 'How I Met Your Mother');"
-            + "INSERT INTO character_tv_show VALUES (4, 1, 'Doogie Howser, M.D.');"
-            + "CREATE TABLE character_actor (id int, character_id int, actor_name char);"
-            + "INSERT INTO character_actor VALUES (1, 4, 'Alyson Hannigan');"
-            + "INSERT INTO character_actor VALUES (2, 3, 'Alyson Hannigan');"
-            + "INSERT INTO character_actor VALUES (3, 2, 'Neil Patrick Harris');"
-            + "INSERT INTO character_actor VALUES (4, 1, 'Neil Patrick Harris');",
-        'table_names': ['character', 'character_tv_show', 'character_actor'],
-        'column_names': ['id', 'name', 'character_id', 'tv_show_name', 'actor_name']
-    },
-    'tv_normalized': {
-        'sql': "CREATE TABLE character (id int, name char);"
-            + "INSERT INTO character VALUES (1, 'Doogie Howser');"
-            + "INSERT INTO character VALUES (2, 'Barney Stinson');"
-            + "INSERT INTO character VALUES (3, 'Lily Aldrin');"
-            + "INSERT INTO character VALUES (4, 'Willow Rosenberg');"
-            + "CREATE TABLE tv_show (id int, name char);"
-            + "INSERT INTO tv_show VALUES (1, 'Buffy the Vampire Slayer');"
-            + "INSERT INTO tv_show VALUES (2, 'How I Met Your Mother');"
-            + "INSERT INTO tv_show VALUES (3, 'Doogie Howser, M.D.');"
-            + "CREATE TABLE character_tv_show (id int, character_id int, tv_show_id int);"
-            + "INSERT INTO character_tv_show VALUES (1, 1, 3);"
-            + "INSERT INTO character_tv_show VALUES (2, 2, 2);"
-            + "INSERT INTO character_tv_show VALUES (3, 3, 2);"
-            + "INSERT INTO character_tv_show VALUES (4, 4, 1);"
-            + "CREATE TABLE actor (id int, name char);"
-            + "INSERT INTO actor VALUES (1, 'Alyson Hannigan');"
-            + "INSERT INTO actor VALUES (2, 'Neil Patrick Harris');"
-            + "CREATE TABLE character_actor (id int, character_id int, actor_id int);"
-            + "INSERT INTO character_actor VALUES (1, 1, 2);"
-            + "INSERT INTO character_actor VALUES (2, 2, 2);"
-            + "INSERT INTO character_actor VALUES (3, 3, 1);"
-            + "INSERT INTO character_actor VALUES (4, 4, 1);",
-        'table_names': ['character', 'tv_show', 'character_tv_show', 'actor', 'character_actor'],
-        'column_names': ['id', 'name', 'character_id', 'tv_show_id', 'actor_id']
-    },
-    'tv_extra': {
-        'sql': "CREATE TABLE character (id int, name char);"
-            + "INSERT INTO character VALUES (1, 'Doogie Howser');"
-            + "INSERT INTO character VALUES (2, 'Barney Stinson');"
-            + "INSERT INTO character VALUES (3, 'Lily Aldrin');"
-            + "INSERT INTO character VALUES (4, 'Willow Rosenberg');"
-            + "INSERT INTO character VALUES (5, 'Steve Urkel');"
-            + "INSERT INTO character VALUES (6, 'Homer Simpson');"
-            + "CREATE TABLE tv_show (id int, name char);"
-            + "INSERT INTO tv_show VALUES (1, 'Buffy the Vampire Slayer');"
-            + "INSERT INTO tv_show VALUES (2, 'How I Met Your Mother');"
-            + "INSERT INTO tv_show VALUES (3, 'Doogie Howser, M.D.');"
-            + "INSERT INTO tv_show VALUES (4, 'Friends');"
-            + "CREATE TABLE character_tv_show (id int, character_id int, tv_show_id int);"
-            + "INSERT INTO character_tv_show VALUES (1, 1, 3);"
-            + "INSERT INTO character_tv_show VALUES (2, 2, 2);"
-            + "INSERT INTO character_tv_show VALUES (3, 3, 2);"
-            + "INSERT INTO character_tv_show VALUES (4, 4, 1);"
-            + "CREATE TABLE actor (id int, name char);"
-            + "INSERT INTO actor VALUES (1, 'Alyson Hannigan');"
-            + "INSERT INTO actor VALUES (2, 'Neil Patrick Harris');"
-            + "INSERT INTO actor VALUES (3, 'Adam Sandler');"
-            + "INSERT INTO actor VALUES (4, 'Steve Carell');"
-            + "CREATE TABLE character_actor (id int, character_id int, actor_id int);"
-            + "INSERT INTO character_actor VALUES (1, 1, 2);"
-            + "INSERT INTO character_actor VALUES (2, 2, 2);"
-            + "INSERT INTO character_actor VALUES (3, 3, 1);"
-            + "INSERT INTO character_actor VALUES (4, 4, 1);",
-        'table_names': ['character', 'tv_show', 'character_tv_show', 'actor', 'character_actor'],
-        'column_names': ['id', 'name', 'character_id', 'tv_show_id', 'tv_show_name', 'actor_name', 'actor_id']
-    },
-    'self_join': {
-        'sql': "CREATE TABLE rps (id int, name char, defeats_id int);"
-            + "INSERT INTO rps VALUES (1, 'Rock', 3);"
-            + "INSERT INTO rps VALUES (2, 'Paper', 1);"
-            + "INSERT INTO rps VALUES (3, 'Scissors', 2);"
-            + "CREATE TABLE employees (id int, name char, title char, boss_id int);"
-            + "INSERT INTO employees VALUES (1, 'Patrick Smith', 'Software Engineer', 2);"
-            + "INSERT INTO employees VALUES (2, 'Abigail Reed', 'Engineering Manager', 3);"
-            + "INSERT INTO employees VALUES (3, 'Bob Carey', 'Director of Engineering', 4);"
-            + "INSERT INTO employees VALUES (4, 'Maxine Tang', 'CEO', null);",
-        'table_names': ['rps', 'employees'],
-        'column_names': ['id', 'name', 'defeats_id', 'title', 'boss_id']
-    },
-    'robot': {
-        'sql': "CREATE TABLE robots (id int, name char);"
-            + "INSERT INTO robots VALUES (1, 'Robot 2000');"
-            + "INSERT INTO robots VALUES (2, 'Champion Robot 2001');"
-            + "INSERT INTO robots VALUES (3, 'Dragon');"
-            + "INSERT INTO robots VALUES (4, 'Turbo Robot 2002');"
-            + "INSERT INTO robots VALUES (5, 'Super Robot 2003');"
-            + "INSERT INTO robots VALUES (6, 'Super Turbo Robot 2004');"
-            + "INSERT INTO robots VALUES (7, 'Not A Robot');"
-            + "INSERT INTO robots VALUES (8, 'Unreleased Turbo Robot 2111');",
-        'table_names': ['robots'],
-        'column_names': ['id', 'name']
-    },
-    'robot_code': {
-        'sql': "CREATE TABLE robots (id int, name char, location char);"
-            + "INSERT INTO robots VALUES (1, 'R2000 - Robot 2000', 'New City, NY');"
-            + "INSERT INTO robots VALUES (2, 'R2001 - Champion Robot 2001', 'Palo Alto, CA');"
-            + "INSERT INTO robots VALUES (3, 'D0001 - Dragon', 'New York City, NY');"
-            + "INSERT INTO robots VALUES (4, 'R2002 - Turbo Robot 2002', 'Spring Valley, NY');"
-            + "INSERT INTO robots VALUES (5, 'R2003 - Super Robot 2003', 'Nyack, NY');"
-            + "INSERT INTO robots VALUES (6, 'R2004 - Super Turbo Robot 2004', 'Tampa, FL');"
-            + "INSERT INTO robots VALUES (7, 'N0001 - Not A Robot', 'Seattle, WA');"
-            + "INSERT INTO robots VALUES (8, 'U2111 - Unreleased Turbo Robot 2111', 'Buffalo, NY');",
-        'table_names': ['robots'],
-        'column_names': ['id', 'name', 'location']
-    },
-    'fighting': {
-        sql: "CREATE TABLE fighters (id int, name char, gun char, sword char, tank char);"
-            + "INSERT INTO fighters VALUES (1, 'US Marine', 'Colt 9mm SMG', 'Swiss Army Knife', 'M1A1 Abrams Tank');"
-            + "INSERT INTO fighters VALUES (2, 'John Wilkes Booth', '.44 caliber Derringer', null, null);"
-            + "INSERT INTO fighters VALUES (3, 'Zorro', null, 'Sword of Zorro', null);"
-            + "INSERT INTO fighters VALUES (4, 'Innocent Bystander', null, null, null);",
-        'table_names': ['fighters'],
-        'column_names': ['id', 'name', 'gun', 'sword', 'tank']
-    }
+    'family': "CREATE TABLE family_members (id int, name char, gender char, species char, num_books_read int);"
+        + "INSERT INTO family_members VALUES (1, 'Dave', 'male', 'human', 200);"
+        + "INSERT INTO family_members VALUES (2, 'Mary', 'female', 'human', 180);"
+        + "INSERT INTO family_members VALUES (3, 'Pickles', 'male', 'dog', 0);",
+    'friends_of_pickles': "CREATE TABLE friends_of_pickles (id int, name char, gender char, species char, height_cm int);"
+        + "INSERT INTO friends_of_pickles VALUES (1, 'Dave', 'male', 'human', 180);"
+        + "INSERT INTO friends_of_pickles VALUES (2, 'Mary', 'female', 'human', 160);"
+        + "INSERT INTO friends_of_pickles VALUES (3, 'Fry', 'male', 'cat', 30);"
+        + "INSERT INTO friends_of_pickles VALUES (4, 'Leela', 'female', 'cat', 25);"
+        + "INSERT INTO friends_of_pickles VALUES (5, 'Odie', 'male', 'dog', 40);"
+        + "INSERT INTO friends_of_pickles VALUES (6, 'Jumpy', 'male', 'dog', 35);"
+        + "INSERT INTO friends_of_pickles VALUES (7, 'Sneakers', 'male', 'dog', 55);",
+    'family_and_legs': "CREATE TABLE family_members (id int, name char, species char, num_books_read int, num_legs int);"
+        + "INSERT INTO family_members VALUES (2, 'Mary', 'human', 180, 2);"
+        + "INSERT INTO family_members VALUES (3, 'Pickles', 'dog', 0, 4);"
+        + "INSERT INTO family_members VALUES (1, 'Dave', 'human', 200, 2);",
+    'family_null': "CREATE TABLE family_members (id int, name char, gender char, species char, favorite_book char);"
+        + "INSERT INTO family_members VALUES (1, 'Dave', 'male', 'human', 'To Kill a Mockingbird');"
+        + "INSERT INTO family_members VALUES (2, 'Mary', 'female', 'human', 'Gone with the Wind');"
+        + "INSERT INTO family_members VALUES (3, 'Pickles', 'male', 'dog', NULL);",
+    'celebs_born': "CREATE TABLE celebs_born (id int, name char, birthdate date);"
+        + "INSERT INTO celebs_born VALUES (1, 'Michael Jordan', '1963-02-17');"
+        + "INSERT INTO celebs_born VALUES (2, 'Justin Timberlake', '1981-01-31');"
+        + "INSERT INTO celebs_born VALUES (3, 'Taylor Swift', '1989-12-13');",
+    'tv': "CREATE TABLE character (id int, name char, actor_id int, tv_show_id int);"
+        + "INSERT INTO character VALUES (1, 'Doogie Howser', 2, 3);"
+        + "INSERT INTO character VALUES (2, 'Barney Stinson', 2, 2);"
+        + "INSERT INTO character VALUES (3, 'Lily Aldrin', 1, 2);"
+        + "INSERT INTO character VALUES (4, 'Willow Rosenberg', 1, 1);"
+        + "CREATE TABLE tv_show (id int, name char, rating float);"
+        + "INSERT INTO tv_show VALUES (1, 'Buffy the Vampire Slayer', 6.2);"
+        + "INSERT INTO tv_show VALUES (2, 'How I Met Your Mother', 7.4);"
+        + "INSERT INTO tv_show VALUES (3, 'Doogie Howser, M.D.', 3.9);"
+        + "CREATE TABLE actor (id int, name char);"
+        + "INSERT INTO actor VALUES (1, 'Alyson Hannigan');"
+        + "INSERT INTO actor VALUES (2, 'Neil Patrick Harris');",
+    'tv_normalized': "CREATE TABLE character (id int, name char);"
+        + "INSERT INTO character VALUES (1, 'Doogie Howser');"
+        + "INSERT INTO character VALUES (2, 'Barney Stinson');"
+        + "INSERT INTO character VALUES (3, 'Lily Aldrin');"
+        + "INSERT INTO character VALUES (4, 'Willow Rosenberg');"
+        + "CREATE TABLE tv_show (id int, name char);"
+        + "INSERT INTO tv_show VALUES (1, 'Buffy the Vampire Slayer');"
+        + "INSERT INTO tv_show VALUES (2, 'How I Met Your Mother');"
+        + "INSERT INTO tv_show VALUES (3, 'Doogie Howser, M.D.');"
+        + "CREATE TABLE character_tv_show (character_id int, tv_show_id int);"
+        + "INSERT INTO character_tv_show VALUES (1, 3);"
+        + "INSERT INTO character_tv_show VALUES (2, 2);"
+        + "INSERT INTO character_tv_show VALUES (3, 2);"
+        + "INSERT INTO character_tv_show VALUES (4, 1);"
+        + "CREATE TABLE actor (id int, name char);"
+        + "INSERT INTO actor VALUES (1, 'Alyson Hannigan');"
+        + "INSERT INTO actor VALUES (2, 'Neil Patrick Harris');"
+        + "CREATE TABLE character_actor (character_id int, actor_id int);"
+        + "INSERT INTO character_actor VALUES (1, 2);"
+        + "INSERT INTO character_actor VALUES (2, 2);"
+        + "INSERT INTO character_actor VALUES (3, 1);"
+        + "INSERT INTO character_actor VALUES (4, 1);",
+    'tv_extra': "CREATE TABLE character (id int, name char);"
+        + "INSERT INTO character VALUES (1, 'Doogie Howser');"
+        + "INSERT INTO character VALUES (2, 'Barney Stinson');"
+        + "INSERT INTO character VALUES (3, 'Lily Aldrin');"
+        + "INSERT INTO character VALUES (4, 'Willow Rosenberg');"
+        + "INSERT INTO character VALUES (5, 'Steve Urkel');"
+        + "INSERT INTO character VALUES (6, 'Homer Simpson');"
+        + "CREATE TABLE tv_show (id int, name char);"
+        + "INSERT INTO tv_show VALUES (1, 'Buffy the Vampire Slayer');"
+        + "INSERT INTO tv_show VALUES (2, 'How I Met Your Mother');"
+        + "INSERT INTO tv_show VALUES (3, 'Doogie Howser, M.D.');"
+        + "INSERT INTO tv_show VALUES (4, 'Friends');"
+        + "CREATE TABLE character_tv_show (id int, character_id int, tv_show_id int);"
+        + "INSERT INTO character_tv_show VALUES (1, 1, 3);"
+        + "INSERT INTO character_tv_show VALUES (2, 2, 2);"
+        + "INSERT INTO character_tv_show VALUES (3, 3, 2);"
+        + "INSERT INTO character_tv_show VALUES (4, 4, 1);"
+        + "CREATE TABLE actor (id int, name char);"
+        + "INSERT INTO actor VALUES (1, 'Alyson Hannigan');"
+        + "INSERT INTO actor VALUES (2, 'Neil Patrick Harris');"
+        + "INSERT INTO actor VALUES (3, 'Adam Sandler');"
+        + "INSERT INTO actor VALUES (4, 'Steve Carell');"
+        + "CREATE TABLE character_actor (id int, character_id int, actor_id int);"
+        + "INSERT INTO character_actor VALUES (1, 1, 2);"
+        + "INSERT INTO character_actor VALUES (2, 2, 2);"
+        + "INSERT INTO character_actor VALUES (3, 3, 1);"
+        + "INSERT INTO character_actor VALUES (4, 4, 1);",
+    'self_join': "CREATE TABLE rps (id int, name char, defeats_id int);"
+        + "INSERT INTO rps VALUES (1, 'Rock', 3);"
+        + "INSERT INTO rps VALUES (2, 'Paper', 1);"
+        + "INSERT INTO rps VALUES (3, 'Scissors', 2);"
+        + "CREATE TABLE employees (id int, name char, title char, boss_id int);"
+        + "INSERT INTO employees VALUES (1, 'Patrick Smith', 'Software Engineer', 2);"
+        + "INSERT INTO employees VALUES (2, 'Abigail Reed', 'Engineering Manager', 3);"
+        + "INSERT INTO employees VALUES (3, 'Bob Carey', 'Director of Engineering', 4);"
+        + "INSERT INTO employees VALUES (4, 'Maxine Tang', 'CEO', null);",
+    'robot': "CREATE TABLE robots (id int, name char);"
+        + "INSERT INTO robots VALUES (1, 'Robot 2000');"
+        + "INSERT INTO robots VALUES (2, 'Champion Robot 2001');"
+        + "INSERT INTO robots VALUES (3, 'Dragon');"
+        + "INSERT INTO robots VALUES (4, 'Turbo Robot 2002');"
+        + "INSERT INTO robots VALUES (5, 'Super Robot 2003');"
+        + "INSERT INTO robots VALUES (6, 'Super Turbo Robot 2004');"
+        + "INSERT INTO robots VALUES (7, 'Not A Robot');"
+        + "INSERT INTO robots VALUES (8, 'Unreleased Turbo Robot 2111');",
+    'robot_code': "CREATE TABLE robots (id int, name char, location char);"
+        + "INSERT INTO robots VALUES (1, 'R2000 - Robot 2000', 'New City, NY');"
+        + "INSERT INTO robots VALUES (2, 'R2001 - Champion Robot 2001', 'Palo Alto, CA');"
+        + "INSERT INTO robots VALUES (3, 'D0001 - Dragon', 'New York City, NY');"
+        + "INSERT INTO robots VALUES (4, 'R2002 - Turbo Robot 2002', 'Spring Valley, NY');"
+        + "INSERT INTO robots VALUES (5, 'R2003 - Super Robot 2003', 'Nyack, NY');"
+        + "INSERT INTO robots VALUES (6, 'R2004 - Super Turbo Robot 2004', 'Tampa, FL');"
+        + "INSERT INTO robots VALUES (7, 'N0001 - Not A Robot', 'Seattle, WA');"
+        + "INSERT INTO robots VALUES (8, 'U2111 - Unreleased Turbo Robot 2111', 'Buffalo, NY');",
+    'fighting': "CREATE TABLE fighters (id int, name char, gun char, sword char, tank char);"
+        + "INSERT INTO fighters VALUES (1, 'US Marine', 'Colt 9mm SMG', 'Swiss Army Knife', 'M1A1 Abrams Tank');"
+        + "INSERT INTO fighters VALUES (2, 'John Wilkes Booth', '.44 caliber Derringer', null, null);"
+        + "INSERT INTO fighters VALUES (3, 'Zorro', null, 'Sword of Zorro', null);"
+        + "INSERT INTO fighters VALUES (4, 'Innocent Bystander', null, null, null);"
 }
