@@ -215,6 +215,8 @@
     var load_database = function (db_type) {
         var database = new sql.Database();
 
+        database.run('PRAGMA foreign_keys = ON;');
+
         database.run(databases[db_type]);
 
         refresh_database_view(database);

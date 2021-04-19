@@ -180,7 +180,7 @@ const levels = [{'name': 'SELECT *',
 
     {'name': 'Multiple joins',
         'short_name': 'multiple_joins',
-        'database_type': 'tv_normalized',
+        'database_type': 'library',
         'answer': {'columns': ['name', 'name'],
             'values': [['Doogie Howser', 'Neil Patrick Harris'],
                 ['Barney Stinson', 'Neil Patrick Harris'],
@@ -327,6 +327,22 @@ const databases = {
         + "CREATE TABLE actor (id int PRIMARY KEY, name char);"
         + "INSERT INTO actor VALUES (1, 'Alyson Hannigan');"
         + "INSERT INTO actor VALUES (2, 'Neil Patrick Harris');",
+    'library': "CREATE TABLE books (id int PRIMARY KEY, title char, price int);"
+        + "INSERT INTO books VALUES (1, 'How To Read', 300);"
+        + "INSERT INTO books VALUES (2, 'Database Design', 285);"
+        + "INSERT INTO books VALUES (3, 'The Lion, the Witch and the First-Years', 290);"
+        + "INSERT INTO books VALUES (4, 'Why You Need Robot Horses', 310);"
+        + "CREATE TABLE authors (id int PRIMARY KEY, first_name char, last_name char);"
+        + "INSERT INTO authors VALUES (1, 'Saurav', 'Zwane');"
+        + "INSERT INTO authors VALUES (2, 'Skosana', 'Mfiki');"
+        + "INSERT INTO authors VALUES (3, 'Nicole', 'Brogan');"
+        + "CREATE TABLE book_author (book int, author int, PRIMARY KEY (book, author), FOREIGN KEY (book) REFERENCES books (id), FOREIGN KEY (author) REFERENCES authors (id));"
+        + "INSERT INTO book_author VALUES(1, 3);"
+        + "INSERT INTO book_author VALUES(2, 1);"
+        + "INSERT INTO book_author VALUES(3, 1);"
+        + "INSERT INTO book_author VALUES(4, 2);"
+        + "INSERT INTO book_author VALUES(2, 2);"
+        + "INSERT INTO book_author VALUES(2, 3);",
     'tv_normalized': "CREATE TABLE character (id int PRIMARY KEY, name char);"
         + "INSERT INTO character VALUES (1, 'Doogie Howser');"
         + "INSERT INTO character VALUES (2, 'Barney Stinson');"
