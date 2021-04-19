@@ -181,12 +181,10 @@ const levels = [{'name': 'SELECT *',
     {'name': 'Multiple joins',
         'short_name': 'multiple_joins',
         'database_type': 'library',
-        'answer': {'columns': ['name', 'name'],
-            'values': [['Doogie Howser', 'Neil Patrick Harris'],
-                ['Barney Stinson', 'Neil Patrick Harris'],
-                ['Lily Aldrin', 'Alyson Hannigan'],
-                ['Willow Rosenberg', 'Alyson Hannigan']]},
-        'prompt': 'In the previous exercise, we explained that TV show character names were not duplicated, so if the name of a character were to change, you would only have to change the name of the character in one row. <br/><br/>However, the previous example was a bit artificial because the TV show names and actor names were duplicated. <br/><br/>In order to not duplicate any names, we need to have more tables, and use multiple joins. <br/><br/>We have tables for characters, TV shows, and actors.  Those tables represent things (also known as entities). <br/><br/>In addition those tables, we have the relationship tables <strong>character_tv_show</strong> and <strong>character_actor</strong>, which capture the relationship between two entities. <br/><br/>This is a flexible way of capturing the relationship between different entities, as some TV show characters might be in multiple shows, and some actors are known for playing multiple characters. <br/><br/>To get each character name with his/her TV show name, we can write <br/><code>SELECT character.name, tv_show.name<br/> FROM character <br/>INNER JOIN character_tv_show<br/> ON character.id = character_tv_show.character_id<br/>INNER JOIN tv_show<br/> ON character_tv_show.tv_show_id = tv_show.id;</code><br/><br/>Can you use two joins to pair each character name with the actor who plays them?  Select the columns: <strong>character</strong>.<em>name</em>, <strong>actor</strong>.<em>name</em>'},
+        'answer': {'columns': ['first_name', 'last_name'],
+            'values': [['Saurav', 'Zwane'],
+                ['Nicole', 'Brogan']]},
+        'prompt': 'In this exercise we have a many-to-many relationship between Authors and Books. This means that authors can write many books and books can have many (co)authors. <br/></br>The <strong>authors</strong> and <strong>books</strong> tables represent things (also known as entities) and the <strong>book_author</strong> book_author captures the relationship between two entities. <br/><br/> Each tuple in the <strong>book_author</strong> table contains author and books ids and captures the fact that an author wrote (or co-wrote) a book. <br/><br/>Can you query a list of all of the authors who wrote the book "Database Design"?  Select the columns: <strong>authors</strong>.<em>first_name</em>, <strong>authors</strong>.<em>last_name</em> <br/><br/>Hint: you will need to use two <code>INNER JOIN ... ON</code> statements followed by a <code>WHERE</code> clause.'},
 
     {'name': 'Joins with WHERE',
         'short_name': 'joins_with_where',
@@ -197,17 +195,17 @@ const levels = [{'name': 'SELECT *',
             'values': [['Doogie Howser', 'Doogie Howser, M.D.']]},
         'prompt': 'You can also use joins with the <code>WHERE</code> clause. <br/><br/> To get a list of characters and TV shows that are not in "Buffy the Vampire Slayer" and are not Barney Stinson, you would run: <br/> <code>SELECT character.name, tv_show.name<br/> FROM character <br/>INNER JOIN character_tv_show<br/> ON character.id = character_tv_show.character_id<br/>INNER JOIN tv_show<br/> ON character_tv_show.tv_show_id = tv_show.id WHERE character.name != \'Barney Stinson\' AND tv_show.name != \'Buffy the Vampire Slayer\';</code> <br/><br/>Can you return a list of characters and TV shows that are not named "Willow Rosenberg" and not in the show "How I Met Your Mother"?'},
 
-    {'name': 'Left joins',
-        'short_name': 'left_joins',
-        'database_type': 'tv_extra',
-        'answer': {'columns': ['name', 'name'],
-            'values': [['Doogie Howser', 'Neil Patrick Harris'],
-                ['Barney Stinson', 'Neil Patrick Harris'],
-                ['Lily Aldrin', 'Alyson Hannigan'],
-                ['Willow Rosenberg', 'Alyson Hannigan'],
-                ['Steve Urkel', null],
-                ['Homer Simpson', null]]},
-        'prompt': 'In the previous exercise, we used joins to match up TV character names with their actors.  When you use <code>INNER JOIN</code>, that is called an "inner join" because it only returns rows where there is data for both the character name and the actor. <br/><br/> However, perhaps you want to get all of the character names, even if there isn\'t corresponding data for the name of the actor.  A <code>LEFT JOIN</code> returns all of the data from the first (or "left") table, and if there isn\'t corresponding data for the second table, it returns <code>NULL</code> for those columns. <br/><br/> Using left joins between character names and TV shows would look like this: <br/><code>SELECT character.name, tv_show.name<br/> FROM character <br/>LEFT JOIN character_tv_show<br/> ON character.id = character_tv_show.character_id<br/> LEFT JOIN tv_show<br/> ON character_tv_show.tv_show_id = tv_show.id;</code> <br/><br/> Can you use left joins to match character names with the actors that play them?  Select the columns: <strong>character</strong>.<em>name</em>, <strong>actor</strong>.<em>name</em> <br/><br/>Note: Other variants of SQL have <code>RIGHT JOIN</code> and <code>OUTER JOIN</code>, but those features are not present in SQLite.'},
+    // {'name': 'Left joins',
+    //     'short_name': 'left_joins',
+    //     'database_type': 'tv_extra',
+    //     'answer': {'columns': ['name', 'name'],
+    //         'values': [['Doogie Howser', 'Neil Patrick Harris'],
+    //             ['Barney Stinson', 'Neil Patrick Harris'],
+    //             ['Lily Aldrin', 'Alyson Hannigan'],
+    //             ['Willow Rosenberg', 'Alyson Hannigan'],
+    //             ['Steve Urkel', null],
+    //             ['Homer Simpson', null]]},
+    //     'prompt': 'In the previous exercise, we used joins to match up TV character names with their actors.  When you use <code>INNER JOIN</code>, that is called an "inner join" because it only returns rows where there is data for both the character name and the actor. <br/><br/> However, perhaps you want to get all of the character names, even if there isn\'t corresponding data for the name of the actor.  A <code>LEFT JOIN</code> returns all of the data from the first (or "left") table, and if there isn\'t corresponding data for the second table, it returns <code>NULL</code> for those columns. <br/><br/> Using left joins between character names and TV shows would look like this: <br/><code>SELECT character.name, tv_show.name<br/> FROM character <br/>LEFT JOIN character_tv_show<br/> ON character.id = character_tv_show.character_id<br/> LEFT JOIN tv_show<br/> ON character_tv_show.tv_show_id = tv_show.id;</code> <br/><br/> Can you use left joins to match character names with the actors that play them?  Select the columns: <strong>character</strong>.<em>name</em>, <strong>actor</strong>.<em>name</em> <br/><br/>Note: Other variants of SQL have <code>RIGHT JOIN</code> and <code>OUTER JOIN</code>, but those features are not present in SQLite.'},
 
     {'name': 'Table alias',
         'short_name': 'table_alias',
@@ -341,7 +339,6 @@ const databases = {
         + "INSERT INTO book_author VALUES(2, 1);"
         + "INSERT INTO book_author VALUES(3, 1);"
         + "INSERT INTO book_author VALUES(4, 2);"
-        + "INSERT INTO book_author VALUES(2, 2);"
         + "INSERT INTO book_author VALUES(2, 3);",
     'tv_normalized': "CREATE TABLE character (id int PRIMARY KEY, name char);"
         + "INSERT INTO character VALUES (1, 'Doogie Howser');"
