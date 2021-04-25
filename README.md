@@ -1,5 +1,7 @@
 # SQL Practice
 
+Adapted from [sqlteaching](https://github.com/rhc2104/sqlteaching).
+
 ## Instructions
 ### Install Dependencies
 ```bash
