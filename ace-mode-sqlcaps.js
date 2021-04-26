@@ -9,7 +9,7 @@ var SqlcapsHighlightRules = function() {
     var keywords = (
         "to|alter|rename|add|column|select|insert|update|set|delete|from|where|and|or|group|by|order|limit|offset|having|as|case|" +
         "when|then|else|end|type|left|right|join|on|outer|desc|asc|union|create|table|primary|key|if|" +
-        "foreign|not|references|default|null|inner|cross|natural|database|drop|grant|like|distinct|into|values"
+        "foreign|not|references|default|null|inner|cross|natural|database|drop|grant|like|distinct|into|values|except|exists"
     ).toUpperCase();
 
     var builtinConstants = (
@@ -18,7 +18,7 @@ var SqlcapsHighlightRules = function() {
 
     var builtinFunctions = (
         "avg|count|first|last|max|min|sum|ucase|lcase|mid|len|round|rank|now|format|" +
-        "coalesce|ifnull|isnull|nvl"
+        "coalesce|ifnull|isnull|nvl|substr"
     ).toUpperCase();
 
     var dataTypes = (
