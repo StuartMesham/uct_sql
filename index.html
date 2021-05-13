@@ -60,7 +60,6 @@
     let execute_query = function () {
         try {
             var results = db.exec(editor.getValue());
-            refresh_database_view(db);
             if (results.length === 0) {
                 document.getElementById("results").innerHTML = '<div class="table-container">no rows returned</div>';
             } else {
@@ -77,6 +76,7 @@
             document.getElementById("results").innerHTML = err;
             document.getElementById("grade").innerHTML = '';
         }
+        refresh_database_view(db);
         // scroll to bottom so mobile users see the result
         // window.scrollTo(0, document.body.scrollHeight);
     };
